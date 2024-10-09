@@ -1,6 +1,6 @@
 ﻿namespace HotelManagementSystem.Interfaces.Dto
 {
-    public class Registration
+    public class Reservation
     {
         public required DateTime CheckInDate { get; set; }
 

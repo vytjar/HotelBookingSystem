@@ -45,7 +45,7 @@ namespace HotelManagementSystem.Services
             return room;
         }
 
-        public async Task<IEnumerable<Registration>> GetRegistrations(int roomId)
+        public async Task<IEnumerable<Interfaces.Dto.Reservation>> GetRegistrations(int roomId)
         {
             var room = _mapper.Map<Room>(await _hotelScope.DbContext.Rooms
                 .AsNoTracking()

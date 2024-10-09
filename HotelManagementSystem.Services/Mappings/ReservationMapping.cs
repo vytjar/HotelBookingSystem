@@ -3,11 +3,11 @@ using HotelManagementSystem.Interfaces.Dto;
 
 namespace HotelManagementSystem.Services.Mappings
 {
-    public class RegistrationMapping : Profile
+    public class ReservationMapping : Profile
     {
-        public RegistrationMapping()
+        public ReservationMapping()
         {
-            CreateMap<Interfaces.Entities.Registration, Registration>()
+            CreateMap<Interfaces.Entities.Reservation, Interfaces.Dto.Reservation>()
                 .ReverseMap();
         }
     }

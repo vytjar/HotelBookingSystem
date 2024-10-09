@@ -10,7 +10,7 @@
 
         public int Id { get; set; }
 
-        public ICollection<Registration> Registrations { get; set; } = [];
+        public ICollection<Reservation> Registrations { get; set; } = [];
 
         public required string RoomNumber { get; set; }
     }

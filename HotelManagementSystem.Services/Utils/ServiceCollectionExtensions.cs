@@ -17,7 +17,7 @@ namespace HotelManagementSystem.Services.Utils
 
             services.AddScoped<HotelScope>();
             services.AddScoped<IHotelService, HotelService>();
-            services.AddScoped<IRegistrationService, RegistrationService>();
+            services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IRoomService, RoomService>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());

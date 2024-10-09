@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Services.Configurations
 {
-    public class RegistrationConfiguration : IEntityTypeConfiguration<Registration>
+    public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
     {
-        public void Configure(EntityTypeBuilder<Registration> builder)
+        public void Configure(EntityTypeBuilder<Reservation> builder)
         {
-            builder.ToTable("Registrations", t =>
+            builder.ToTable("Reservations", t =>
             {
                 t.HasCheckConstraint("CK_Registration_CheckOutDate", "\"CheckOutDate\" > \"CheckInDate\"");
             });
