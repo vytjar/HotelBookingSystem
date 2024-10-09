@@ -33,6 +33,7 @@ namespace HotelManagementSystem.Services
         public async Task<Hotel> GetAsync(int hotelId)
         {
             var hotel = _mapper.Map<Hotel>(await _hotelScope.DbContext.Hotels
+                .AsNoTracking()
                 .Where(h => h.Id == hotelId)
                 .SingleOrDefaultAsync());
 
@@ -46,22 +47,28 @@ namespace HotelManagementSystem.Services
 
         public async Task<IEnumerable<Room>> GetRoomsAsync(int hotelId)
         {
-            var hotel = _mapper.Map<Hotel>(await _hotelScope.DbContext.Hotels
+            var hotel = await _hotelScope.DbContext.Hotels
+                .AsNoTracking()
                 .Where(h => h.Id == hotelId)
-                .Include(h => h.Rooms)
-                .SingleOrDefaultAsync());
+                .SingleOrDefaultAsync();
 
             if (hotel is null)
             {
                 throw new NotFoundException($"Hotel {hotelId} could not be found");
             }
 
-            return hotel.Rooms.Select(_mapper.Map<Room>);
+            var rooms = await _hotelScope.DbContext.Rooms
+                .AsNoTracking()
+                .Where(r => r.HotelId == hotelId)
+                .ToListAsync();
+
+            return rooms.Select(_mapper.Map<Room>);
         }
 
         public async Task RemoveAsync(int hotelId)
         {
             var hotel = await _hotelScope.DbContext.Hotels
+                .AsNoTracking()
                 .Where(h => h.Id == hotelId)
                 .SingleOrDefaultAsync();
 
@@ -80,6 +87,7 @@ namespace HotelManagementSystem.Services
             await Validate(hotel);
 
             var hotelSource = await _hotelScope.DbContext.Hotels
+                .AsNoTracking()
                 .Where(h => h.Id == hotel.Id)
                 .SingleOrDefaultAsync();
 
@@ -92,7 +100,7 @@ namespace HotelManagementSystem.Services
             
             await _hotelScope.DbContext.SaveChangesAsync();
 
-            if (hotelUpdated is null)
+            if (hotelUpdated.Entity is null)
             {
                 throw new Exception($"Hotel {hotel.Id} could not be updated");
             }

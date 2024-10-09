@@ -24,7 +24,7 @@ namespace HotelManagementSystem.Services.Configurations
             builder.Property(r => r.Capacity)
                 .IsRequired();
 
-            builder.HasMany(r => r.Registrations)
+            builder.HasMany(r => r.Reservations)
                 .WithOne(reg => reg.Room)
                 .HasForeignKey(reg => reg.RoomId)
                 .OnDelete(DeleteBehavior.Cascade);

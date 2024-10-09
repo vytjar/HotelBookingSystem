@@ -16,7 +16,12 @@ namespace HotelManagementSystem.Services
         {
             await Validate(reservation);
 
-            var reservationCreated = await _hotelScope.DbContext.Registrations.AddAsync(_mapper.Map<Interfaces.Entities.Reservation>(reservation));
+            var reservationEntity = _mapper.Map<Interfaces.Entities.Reservation>(reservation);
+
+            reservationEntity.CheckInDate = reservation.CheckInDate.ToUniversalTime();
+            reservationEntity.CheckOutDate = reservation.CheckOutDate.ToUniversalTime();
+
+            var reservationCreated = await _hotelScope.DbContext.Reservations.AddAsync(reservationEntity);
 
             if (reservationCreated.Entity is null)
             {
@@ -32,7 +37,8 @@ namespace HotelManagementSystem.Services
 
         public async Task<Reservation> GetAsync(int reservationId)
         {
-            var reservation = _mapper.Map<Reservation>(await _hotelScope.DbContext.Registrations
+            var reservation = _mapper.Map<Reservation>(await _hotelScope.DbContext.Reservations
+                .AsNoTracking()
                 .Where(h => h.Id == reservationId)
                 .SingleOrDefaultAsync());
 
@@ -46,7 +52,7 @@ namespace HotelManagementSystem.Services
 
         public async Task RemoveAsync(int reservationId)
         {
-            var reservation = await _hotelScope.DbContext.Registrations
+            var reservation = await _hotelScope.DbContext.Reservations
                 .Where(h => h.Id == reservationId)
                 .SingleOrDefaultAsync();
 
@@ -55,7 +61,7 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException($"Registration {reservationId} could not be found");
             }
 
-            _hotelScope.DbContext.Registrations.Remove(reservation);
+            _hotelScope.DbContext.Reservations.Remove(reservation);
 
             await _hotelScope.DbContext.SaveChangesAsync();
         }
@@ -64,7 +70,7 @@ namespace HotelManagementSystem.Services
         {
             await Validate(reservation);
 
-            var reservationUpdated = _hotelScope.DbContext.Registrations.Update(_mapper.Map<Interfaces.Entities.Reservation>(reservation));
+            var reservationUpdated = _hotelScope.DbContext.Reservations.Update(_mapper.Map<Interfaces.Entities.Reservation>(reservation));
 
             await _hotelScope.DbContext.SaveChangesAsync();
 
@@ -78,7 +84,7 @@ namespace HotelManagementSystem.Services
                 throw new ArgumentNullException(nameof(reservation));
             }
 
-            if (reservation.CheckOutDate <= reservation.CheckOutDate)
+            if (reservation.CheckOutDate <= reservation.CheckInDate)
             {
                 throw new ValidationException($"Check out date {reservation.CheckOutDate:yyyy-MM-dd} can not be before or on the same day as the check in date {reservation.CheckInDate:yyyy-MM-dd}");
             }
@@ -97,7 +103,7 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException($"Room {reservation.RoomId} could not be found");
             }
 
-            var reservationExisting = await _hotelScope.DbContext.Registrations
+            var reservationExisting = await _hotelScope.DbContext.Reservations
                 .Where(r => r.Id == reservation.RoomId &&
                     r.CheckInDate < reservation.CheckOutDate &&
                     r.CheckOutDate > reservation.CheckInDate

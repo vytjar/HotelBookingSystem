@@ -13,7 +13,7 @@ namespace HotelManagementSystem.Interfaces.Services
 
         Task<Room> GetAsync(int roomId);
 
-        Task<IEnumerable<Reservation>> GetRegistrations(int roomId);
+        Task<IEnumerable<Reservation>> GetReservations(int roomId);
 
         Task<bool> RemoveAsync(int roomId);
 

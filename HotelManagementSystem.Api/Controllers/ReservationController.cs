@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Api.Controllers
 {
+    [ApiController]
     [Route("Api/Reservations")]
     public class ReservationController(IReservationService reservationService) : Controller
     {
@@ -24,7 +25,7 @@ namespace HotelManagementSystem.Api.Controllers
         }
 
         [HttpPost]
-        [Route("Remove")]
+        [Route("{reservationId}/Remove")]
         public async Task<IActionResult> Remove(int reservationId)
         {
             await _reservationService.RemoveAsync(reservationId);
@@ -32,7 +33,7 @@ namespace HotelManagementSystem.Api.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> Update(Reservation reservation)
         {

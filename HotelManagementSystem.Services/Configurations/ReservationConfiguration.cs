@@ -25,7 +25,7 @@ namespace HotelManagementSystem.Services.Configurations
                 .IsRequired();
 
             builder.HasOne(reg => reg.Room)
-                .WithMany(r => r.Registrations)
+                .WithMany(r => r.Reservations)
                 .HasForeignKey(reg => reg.RoomId);
         }
     }

@@ -10,7 +10,7 @@ namespace HotelManagementSystem.Services.Repositories
 
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
-        public DbSet<Interfaces.Entities.Reservation> Registrations { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,6 +19,8 @@ namespace HotelManagementSystem.Services.Repositories
             modelBuilder.ApplyConfiguration(new HotelConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
             modelBuilder.ApplyConfiguration(new ReservationConfiguration());
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
     }
 }

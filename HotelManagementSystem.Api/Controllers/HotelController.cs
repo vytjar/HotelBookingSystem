@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Api.Controllers
 {
+    [ApiController]
     [Route("Api/Hotels")]
     public class HotelController(IHotelService hotelService) : Controller
     {
@@ -23,8 +24,15 @@ namespace HotelManagementSystem.Api.Controllers
             return Ok(await _hotelService.GetAsync(hotelId));
         }
 
+        [HttpGet]
+        [Route("{hotelId}/Rooms")]
+        public async Task<IActionResult> GetRooms(int hotelId)
+        {
+            return Ok(await _hotelService.GetRoomsAsync(hotelId));
+        }
+
         [HttpPost]
-        [Route("Remove")]
+        [Route("{hotelId}/Remove")]
         public async Task<IActionResult> Remove(int hotelId)
         {
             await _hotelService.RemoveAsync(hotelId);

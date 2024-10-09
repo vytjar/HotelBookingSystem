@@ -45,12 +45,11 @@ namespace HotelManagementSystem.Services
             return room;
         }
 
-        public async Task<IEnumerable<Interfaces.Dto.Reservation>> GetRegistrations(int roomId)
+        public async Task<IEnumerable<Reservation>> GetReservations(int roomId)
         {
             var room = _mapper.Map<Room>(await _hotelScope.DbContext.Rooms
                 .AsNoTracking()
                 .Where(r => r.Id == roomId)
-                .Include(r => r.Registrations)
                 .SingleOrDefaultAsync());
 
             if (room is null)
@@ -58,7 +57,13 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException($"Room {roomId} could not be found");
             }
 
-            return room.Registrations;
+            var reservations = (await _hotelScope.DbContext.Reservations
+                .AsNoTracking()
+                .Where(r => r.RoomId == roomId)
+                .ToListAsync())
+                .Select(_mapper.Map<Reservation>);
+
+            return reservations;
         }
 
         public async Task<bool> RemoveAsync(int roomId)
@@ -84,9 +89,24 @@ namespace HotelManagementSystem.Services
         {
             await Validate(room);
 
+            var roomSource = await _hotelScope.DbContext.Rooms
+                .AsNoTracking()
+                .Where(r => r.Id == room.Id)
+                .SingleOrDefaultAsync();
+
+            if (roomSource is null)
+            {
+                throw new NotFoundException($"Room {room.Id} could not be found");
+            }
+
             var roomUpdated = _hotelScope.DbContext.Rooms.Update(_mapper.Map<Interfaces.Entities.Room>(room));
 
             await _hotelScope.DbContext.SaveChangesAsync();
+
+            if (roomUpdated.Entity is null)
+            {
+                throw new Exception($"Room {room.Id} could not be updated");
+            }
 
             return _mapper.Map<Room>(roomUpdated.Entity);
         }
