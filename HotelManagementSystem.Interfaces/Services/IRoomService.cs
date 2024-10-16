@@ -1,9 +1,4 @@
 ﻿using HotelManagementSystem.Interfaces.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelManagementSystem.Interfaces.Services
 {
@@ -11,11 +6,13 @@ namespace HotelManagementSystem.Interfaces.Services
     {
         Task<Room> CreateAsync(Room room);
 
-        Task<Room> GetAsync(int roomId);
+        Task DeleteAsync(int roomId);
+
+        Task<Room> GetRoomAsync(int roomId);
+
+        Task<IEnumerable<Room>> GetRoomsAsync();
 
         Task<IEnumerable<Reservation>> GetReservations(int roomId);
-
-        Task<bool> RemoveAsync(int roomId);
 
         Task<Room> UpdateAsync(Room room);
     }

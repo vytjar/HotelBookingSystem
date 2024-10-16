@@ -29,22 +29,6 @@ namespace HotelManagementSystem.Services
 
             return room;
         }
-
-        public async Task<Room> GetAsync(int roomId)
-        {
-             var room = _mapper.Map<Room>(await _hotelScope.DbContext.Rooms
-                .AsNoTracking()
-                .Where(r => r.Id == roomId)
-                .SingleOrDefaultAsync());
-
-            if (room is null)
-            {
-                throw new NotFoundException($"Room {roomId} could not be found");
-            }
-
-            return room;
-        }
-
         public async Task<IEnumerable<Reservation>> GetReservations(int roomId)
         {
             var room = _mapper.Map<Room>(await _hotelScope.DbContext.Rooms
@@ -66,7 +50,29 @@ namespace HotelManagementSystem.Services
             return reservations;
         }
 
-        public async Task<bool> RemoveAsync(int roomId)
+        public async Task<Room> GetRoomAsync(int roomId)
+        {
+             var room = _mapper.Map<Room>(await _hotelScope.DbContext.Rooms
+                .AsNoTracking()
+                .Where(r => r.Id == roomId)
+                .SingleOrDefaultAsync());
+
+            if (room is null)
+            {
+                throw new NotFoundException($"Room {roomId} could not be found");
+            }
+
+            return room;
+        }
+        public async Task<IEnumerable<Room>> GetRoomsAsync()
+        {
+            return (await _hotelScope.DbContext.Rooms
+                .AsNoTracking()
+                .ToListAsync())
+                .Select(_mapper.Map<Room>);
+        }
+
+        public async Task DeleteAsync(int roomId)
         {
             var room = await _hotelScope.DbContext.Rooms
                .AsNoTracking()
@@ -75,14 +81,12 @@ namespace HotelManagementSystem.Services
 
             if (room is null)
             {
-                return false;
+                throw new NotFoundException($"Room {roomId} could not be found");
             }
 
             _hotelScope.DbContext.Rooms.Remove(room);
 
             await _hotelScope.DbContext.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<Room> UpdateAsync(Room room)

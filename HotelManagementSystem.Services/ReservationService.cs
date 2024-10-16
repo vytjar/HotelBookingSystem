@@ -35,7 +35,7 @@ namespace HotelManagementSystem.Services
             return reservation;
         }
 
-        public async Task<Reservation> GetAsync(int reservationId)
+        public async Task<Reservation> GetReservationAsync(int reservationId)
         {
             var reservation = _mapper.Map<Reservation>(await _hotelScope.DbContext.Reservations
                 .AsNoTracking()
@@ -50,7 +50,15 @@ namespace HotelManagementSystem.Services
             return reservation;
         }
 
-        public async Task RemoveAsync(int reservationId)
+        public async Task<IEnumerable<Reservation>> GetReservationsAsync()
+        {
+            return (await _hotelScope.DbContext.Reservations
+                .AsNoTracking()
+                .ToListAsync())
+                .Select(_mapper.Map<Reservation>);
+        }
+
+        public async Task DeleteAsync(int reservationId)
         {
             var reservation = await _hotelScope.DbContext.Reservations
                 .Where(h => h.Id == reservationId)
@@ -103,14 +111,19 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException($"Room {reservation.RoomId} could not be found");
             }
 
-            var reservationExisting = await _hotelScope.DbContext.Reservations
-                .Where(r => r.Id == reservation.RoomId &&
+            if (room.Capacity < reservation.GuestCount)
+            {
+                throw new ValidationException($"Guest count {reservation.GuestCount} exceeds the rooms capacity {room.Capacity}.");
+            }
+
+            var reservationOverlaps = await _hotelScope.DbContext.Reservations
+                .Where(r => r.RoomId == reservation.RoomId &&
                     r.CheckInDate < reservation.CheckOutDate &&
                     r.CheckOutDate > reservation.CheckInDate
                 )
-                .SingleOrDefaultAsync();
+                .AnyAsync();
 
-            if (reservationExisting is not null)
+            if (reservationOverlaps)
             {
                 throw new ValidationException($"Registration check in {reservation.CheckInDate:yyyy-MM-dd} and check out {reservation.CheckOutDate:yyyy-MM-dd} dates intersect with an already existing reservation.");
             }

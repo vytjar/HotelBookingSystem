@@ -30,7 +30,25 @@ namespace HotelManagementSystem.Services
             return hotel;
         }
 
-        public async Task<Hotel> GetAsync(int hotelId)
+        public async Task DeleteAsync(int hotelId)
+        {
+            var hotel = await _hotelScope.DbContext.Hotels
+                .AsNoTracking()
+                .Where(h => h.Id == hotelId)
+                .SingleOrDefaultAsync();
+
+            if (hotel is null)
+            {
+                throw new NotFoundException($"Hotel {hotelId} could not be found");
+            }
+
+            _hotelScope.DbContext.Hotels.Remove(hotel);
+
+            await _hotelScope.DbContext.SaveChangesAsync();
+        }
+
+
+        public async Task<Hotel> GetHotelAsync(int hotelId)
         {
             var hotel = _mapper.Map<Hotel>(await _hotelScope.DbContext.Hotels
                 .AsNoTracking()
@@ -43,6 +61,14 @@ namespace HotelManagementSystem.Services
             }
 
             return hotel;
+        }
+
+        public async Task<IEnumerable<Hotel>> GetHotelsAsync()
+        {
+            return (await _hotelScope.DbContext.Hotels
+                .AsNoTracking()
+                .ToListAsync())
+                .Select(_mapper.Map<Hotel>);
         }
 
         public async Task<IEnumerable<Room>> GetRoomsAsync(int hotelId)
@@ -63,23 +89,6 @@ namespace HotelManagementSystem.Services
                 .ToListAsync();
 
             return rooms.Select(_mapper.Map<Room>);
-        }
-
-        public async Task RemoveAsync(int hotelId)
-        {
-            var hotel = await _hotelScope.DbContext.Hotels
-                .AsNoTracking()
-                .Where(h => h.Id == hotelId)
-                .SingleOrDefaultAsync();
-
-            if (hotel is null)
-            {
-                throw new NotFoundException($"Hotel {hotelId} could not be found");
-            }
-
-            _hotelScope.DbContext.Hotels.Remove(hotel);
-
-            await _hotelScope.DbContext.SaveChangesAsync();
         }
 
         public async Task<Hotel> UpdateAsync(Hotel hotel)

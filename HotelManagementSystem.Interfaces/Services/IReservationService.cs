@@ -4,12 +4,14 @@ namespace HotelManagementSystem.Interfaces.Services
 {
     public interface IReservationService
     {
-        Task<Reservation> CreateAsync(Reservation registration);
+        Task<Reservation> CreateAsync(Reservation reservation);
 
-        Task<Reservation> GetAsync(int registrationId);
+        Task<Reservation> GetReservationAsync(int reservationId);
 
-        Task RemoveAsync(int registrationId);
+        Task<IEnumerable<Reservation>> GetReservationsAsync();
 
-        Task<Reservation> UpdateAsync(Reservation registration);
+        Task DeleteAsync(int reservationId);
+
+        Task<Reservation> UpdateAsync(Reservation reservation);
     }
 }

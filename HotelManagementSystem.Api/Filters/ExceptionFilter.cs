@@ -14,9 +14,12 @@ namespace HotelManagementSystem.Api.Filters
 
             context.Result = context.Exception switch
             {
-                ArgumentNullException => new BadRequestObjectResult(context.Exception.Message),
+                ArgumentNullException => new ObjectResult(new { message = context.Exception.Message })
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                },
                 NotFoundException => new NotFoundObjectResult(context.Exception.Message),
-                ValidationException => new BadRequestObjectResult(context.Exception.Message),
+                ValidationException => new UnprocessableEntityObjectResult(context.Exception.Message),
                 _ => new StatusCodeResult(500)
             };
 
