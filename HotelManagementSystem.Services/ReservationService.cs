@@ -44,7 +44,7 @@ namespace HotelManagementSystem.Services
 
             if (reservation is null)
             {
-                throw new NotFoundException($"Registration {reservationId} could not be found");
+                throw new NotFoundException($"Reservation {reservationId} could not be found");
             }
 
             return reservation;
@@ -66,7 +66,7 @@ namespace HotelManagementSystem.Services
 
             if (reservation is null)
             {
-                throw new NotFoundException($"Registration {reservationId} could not be found");
+                throw new NotFoundException($"Reservation {reservationId} could not be found");
             }
 
             _hotelScope.DbContext.Reservations.Remove(reservation);
@@ -125,7 +125,7 @@ namespace HotelManagementSystem.Services
 
             if (reservationOverlaps)
             {
-                throw new ValidationException($"Registration check in {reservation.CheckInDate:yyyy-MM-dd} and check out {reservation.CheckOutDate:yyyy-MM-dd} dates intersect with an already existing reservation.");
+                throw new ValidationException($"Reservation with check in {reservation.CheckInDate:yyyy-MM-dd} and check out {reservation.CheckOutDate:yyyy-MM-dd} dates intersect with an already existing reservations.");
             }
         }
     }
