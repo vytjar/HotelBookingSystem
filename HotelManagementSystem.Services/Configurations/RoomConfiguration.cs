@@ -8,8 +8,7 @@ namespace HotelManagementSystem.Services.Configurations
     {
         public void Configure(EntityTypeBuilder<Room> builder)
         {
-            builder
-                .ToTable("Rooms");
+            builder.ToTable("Rooms");
 
             builder.HasKey(r => r.Id);
 
@@ -18,7 +17,8 @@ namespace HotelManagementSystem.Services.Configurations
                 .IsRequired()
                 .HasMaxLength(10);
 
-            builder.Property(r => r.Capacity)
+            builder
+                .Property(r => r.Capacity)
                 .IsRequired();
 
             builder

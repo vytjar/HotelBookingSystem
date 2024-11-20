@@ -33,14 +33,10 @@ namespace HotelManagementSystem.Services
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var accessToken = _jwtTokenService.CreateAccessToken(user.UserName!, user.Id, roles);
-
-            var refreshToken = _jwtTokenService.CreateRefreshToken(user.Id);
-
             return new LoginResponse
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
+                AccessToken = _jwtTokenService.CreateAccessToken(user.UserName!, user.Id, roles),
+                RefreshToken = _jwtTokenService.CreateRefreshToken(user.Id)
             };
         }
 
