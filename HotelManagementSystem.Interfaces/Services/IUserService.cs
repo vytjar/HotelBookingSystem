@@ -6,9 +6,11 @@ namespace HotelManagementSystem.Interfaces.Services
 {
     public interface IUserService
     {
-        public Task<RefreshTokensResponse> RefreshTokens(string refreshToken);
-
         public Task<LoginResponse> LoginAsync(LoginRequest request);
+
+        public Task LogoutAsync(string refreshToken);
+
+        public Task<RefreshTokensResponse> RefreshTokens(string refreshToken);
 
         public Task RegisterAsync(RegisterRequest request);
     }

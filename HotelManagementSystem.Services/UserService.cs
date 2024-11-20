@@ -11,10 +11,16 @@ using System.Security.Claims;
 
 namespace HotelManagementSystem.Services
 {
-    public class UserService(HotelScope hotelScope, IJwtTokenService jwtTokenService, UserManager<User> userManager) : IUserService
+    public class UserService(
+        HotelScope hotelScope,
+        IJwtTokenService jwtTokenService,
+        ISessionService sessionService,
+        UserManager<User> userManager
+    ) : IUserService
     {
         private readonly HotelScope _hotelScope = hotelScope;
         private readonly IJwtTokenService _jwtTokenService = jwtTokenService;
+        private readonly ISessionService _sessionService = sessionService;
         private readonly UserManager<User> _userManager = userManager;
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -31,13 +37,38 @@ namespace HotelManagementSystem.Services
                 throw new ValidationException("Invalid username or password.");
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var sessionId = Guid.NewGuid();
+            var refreshToken = _jwtTokenService.CreateRefreshToken(sessionId, user.Id);
+            
+            await _sessionService.CreateAsync(new CreateSessionRequest
+            {
+                SessionId = sessionId,
+                RefreshToken = refreshToken,
+                UserId = user.Id
+            });
 
             return new LoginResponse
             {
-                AccessToken = _jwtTokenService.CreateAccessToken(user.UserName!, user.Id, roles),
-                RefreshToken = _jwtTokenService.CreateRefreshToken(user.Id)
+                AccessToken = _jwtTokenService.CreateAccessToken(user.UserName!, user.Id, await _userManager.GetRolesAsync(user)),
+                RefreshToken = refreshToken
             };
+        }
+
+        public async Task LogoutAsync(string refreshToken)
+        {
+            if (!_jwtTokenService.TryParseRefreshToken(refreshToken, out var claimsPrincipal) || claimsPrincipal is null)
+            {
+                throw new ValidationException("Invalid refresh token.");
+            }
+
+            var sessionId = claimsPrincipal.FindFirstValue(ClaimNames.SessionId);
+
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                throw new ValidationException("Invalid refresh token.");
+            }
+
+            await _sessionService.RevokeAsync(Guid.Parse(sessionId));
         }
 
         public async Task<RefreshTokensResponse> RefreshTokens(string refreshToken)
@@ -47,9 +78,10 @@ namespace HotelManagementSystem.Services
                 throw new ValidationException("Invalid refresh token.");
             }
 
+            var sessionId = claimsPrincipal.FindFirstValue(ClaimNames.SessionId);
             var userId = claimsPrincipal.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(sessionId) || string.IsNullOrEmpty(userId))
             {
                 throw new ValidationException("Invalid refresh token.");
             }
@@ -61,12 +93,25 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException("User not found.");
             }
 
+            var sessionIdGuid = Guid.Parse(sessionId);
+
+            if (!await _sessionService.ValidateAsync(sessionIdGuid, refreshToken))
+            {
+                throw new ValidationException("Invalid session.");
+            }
+
+            await _sessionService.ExtendAsync(new ExtendSessionRequest
+            {
+                SessionId = sessionIdGuid,
+                RefreshToken = refreshToken
+            });
+
             var roles = await _userManager.GetRolesAsync(user);
 
             return new RefreshTokensResponse
             {
                 AccessToken = _jwtTokenService.CreateAccessToken(user.UserName!, user.Id, roles),
-                RefreshToken = _jwtTokenService.CreateRefreshToken(user.Id)
+                RefreshToken = _jwtTokenService.CreateRefreshToken(sessionIdGuid, user.Id)
             };
         }
 

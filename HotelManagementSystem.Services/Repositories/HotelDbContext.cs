@@ -2,6 +2,7 @@
 using HotelManagementSystem.Services.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Permissions;
 
 namespace HotelManagementSystem.Services.Repositories
 {
@@ -12,6 +13,7 @@ namespace HotelManagementSystem.Services.Repositories
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

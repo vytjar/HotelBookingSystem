@@ -8,9 +8,10 @@ namespace HotelManagementSystem.Api.Controllers
 {
     [ApiController]
     [Route("Api/Users")]
-    public class UserController(IUserService userService) : Controller
+    public class UserController(IConfiguration configuration, IUserService userService) : Controller
     {
         private readonly IUserService _userService = userService;
+        private readonly int _refreshTokenExpirationDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays");
 
         [HttpPost]
         [Route("Login")]
@@ -37,7 +38,34 @@ namespace HotelManagementSystem.Api.Controllers
         }
 
         [HttpPost]
+        [Route("Logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Request.Cookies.TryGetValue(CookieNames.RefreshToken, out var refreshToken);
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Unauthorized();
+            }
+
+            await _userService.LogoutAsync(refreshToken);
+
+            HttpContext.Response.Cookies.Delete(CookieNames.RefreshToken);
+
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("Refresh")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Refresh()
         {
             if (!HttpContext.Request.Cookies.TryGetValue(CookieNames.RefreshToken, out var refreshToken))
@@ -77,10 +105,10 @@ namespace HotelManagementSystem.Api.Controllers
         {
             var cookieOptions = new CookieOptions
             {
+                Expires = DateTime.UtcNow.AddDays(_refreshTokenExpirationDays),
                 HttpOnly = true,
                 Secure = false, // TODO: Set to true in production
                 SameSite = SameSiteMode.Lax,
-                Expires = DateTime.UtcNow.AddDays(7),
             };
 
             HttpContext.Response.Cookies.Append(CookieNames.RefreshToken, refreshToken, cookieOptions);

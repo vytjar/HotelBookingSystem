@@ -20,6 +20,7 @@ namespace HotelManagementSystem.Services.Utils
             services.AddScoped<IHotelService, HotelService>();
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<IUserService, UserService>();
             
             services.AddTransient<IJwtTokenService, JwtTokenService>();

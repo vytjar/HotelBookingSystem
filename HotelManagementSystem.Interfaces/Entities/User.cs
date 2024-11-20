@@ -9,5 +9,7 @@ namespace HotelManagementSystem.Interfaces.Entities
         public required string Surname { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; } = [];
+
+        public ICollection<Session> Sessions { get; set; } = [];
     }
 }

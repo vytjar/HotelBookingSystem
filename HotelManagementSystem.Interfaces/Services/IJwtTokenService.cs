@@ -6,7 +6,7 @@ namespace HotelManagementSystem.Services
     {
         string CreateAccessToken(string userName, string userId, IEnumerable<string> roles);
 
-        string CreateRefreshToken(string userId);
+        string CreateRefreshToken(Guid sessionId, string userId);
 
         bool TryParseRefreshToken(string refreshToken, out ClaimsPrincipal? claimsPrincipal);
     }

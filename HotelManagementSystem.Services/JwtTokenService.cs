@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using HotelManagementSystem.Interfaces.Constants;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -36,11 +37,12 @@ namespace HotelManagementSystem.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string CreateRefreshToken(string userId)
+        public string CreateRefreshToken(Guid sessionId, string userId)
         {
             var claims = new List<Claim>()
             {
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimNames.SessionId, sessionId.ToString()),
                 new(JwtRegisteredClaimNames.Sub, userId)
             };
 
