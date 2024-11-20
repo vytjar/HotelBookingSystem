@@ -1,10 +1,11 @@
 ﻿using HotelManagementSystem.Interfaces.Entities;
 using HotelManagementSystem.Services.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Services.Repositories
 {
-    public class HotelDbContext : DbContext
+    public class HotelDbContext : IdentityDbContext<User>
     {
         public HotelDbContext(DbContextOptions<HotelDbContext> options) : base(options) { }
 
