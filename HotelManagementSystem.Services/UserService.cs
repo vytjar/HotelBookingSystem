@@ -23,6 +23,26 @@ namespace HotelManagementSystem.Services
         private readonly ISessionService _sessionService = sessionService;
         private readonly UserManager<User> _userManager = userManager;
 
+        public async Task AssignRoleAsync(AssignRoleRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserName);
+
+            if (user is null)
+            {
+                throw new NotFoundException($"User {request.UserName} not found.");
+            }
+
+            if (!Roles.All.Any(r => string.Equals(r, request.Role)))
+            {
+                throw new ValidationException($"{request.Role} is not a valid role.");
+            }
+
+            if (!await _userManager.IsInRoleAsync(user, request.Role))
+            {
+                await _userManager.AddToRoleAsync(user, request.Role);
+            }
+        }
+
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);

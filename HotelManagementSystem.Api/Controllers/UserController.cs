@@ -2,6 +2,7 @@
 using HotelManagementSystem.Interfaces.Dto;
 using HotelManagementSystem.Interfaces.Dto.Requests;
 using HotelManagementSystem.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Api.Controllers
@@ -12,6 +13,26 @@ namespace HotelManagementSystem.Api.Controllers
     {
         private readonly IUserService _userService = userService;
         private readonly int _refreshTokenExpirationDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays");
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost]
+        [Route("AssignRole")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AssignRole(AssignRoleRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _userService.AssignRoleAsync(request);
+
+            return Ok();
+        }
 
         [HttpPost]
         [Route("Login")]

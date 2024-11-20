@@ -6,6 +6,8 @@ namespace HotelManagementSystem.Interfaces.Services
 {
     public interface IUserService
     {
+        public Task AssignRoleAsync(AssignRoleRequest request);
+
         public Task<LoginResponse> LoginAsync(LoginRequest request);
 
         public Task LogoutAsync(string refreshToken);
