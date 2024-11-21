@@ -43,6 +43,30 @@ namespace HotelManagementSystem.Services
             }
         }
 
+        public async Task<User> GetUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            
+            if (user is null)
+            {
+                throw new NotFoundException($"User {userId} not found.");
+            }
+
+            return user;
+        }
+
+        public async Task<IEnumerable<string>> GetUserRoles(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
+            {
+                throw new NotFoundException($"User {userId} not found.");
+            }
+
+            return await _userManager.GetRolesAsync(user);
+        }
+
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);

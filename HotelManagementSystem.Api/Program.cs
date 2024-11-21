@@ -28,7 +28,11 @@ builder.Services.AddLogging();
 builder.Services.AddServices(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.CustomSchemaIds(type => type.FullName);
+});
 
 builder.Services
     .AddIdentity<User, IdentityRole>()

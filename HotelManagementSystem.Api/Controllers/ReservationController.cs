@@ -1,6 +1,9 @@
 ﻿using HotelManagementSystem.Interfaces.Dto;
 using HotelManagementSystem.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace HotelManagementSystem.Api.Controllers
 {
@@ -19,6 +22,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="400">If the request is malformed.</response>
         /// <response code="422">If the provided reservation data is semantically invalid.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -31,6 +35,15 @@ namespace HotelManagementSystem.Api.Controllers
                 return BadRequest(ModelState);
             }
 
+            var userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is missing from the token.");
+            }
+
+            reservation.UserId = userId;
+
             return Created(string.Empty, await _reservationService.CreateAsync(reservation));
         }
 
@@ -41,6 +54,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="204">The reservation was successfully deleted.</response>
         /// <response code="404">If the reservation with the given ID was not found.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize]
         [HttpDelete]
         [Route("{reservationId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -48,7 +62,14 @@ namespace HotelManagementSystem.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int reservationId)
         {
-            await _reservationService.DeleteAsync(reservationId);
+            var userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is missing from the token.");
+            }
+
+            await _reservationService.DeleteAsync(reservationId, userId);
 
             return NoContent();
         }
@@ -61,6 +82,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="200">The reservation was found and returned.</response>
         /// <response code="404">If the reservation with the given ID was not found.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize]
         [HttpGet]
         [Route("{reservationId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,7 +90,14 @@ namespace HotelManagementSystem.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetReservation(int reservationId)
         {
-            return Ok(await _reservationService.GetReservationAsync(reservationId));
+            var userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is missing from the token.");
+            }
+
+            return Ok(await _reservationService.GetReservationAsync(reservationId, userId));
         }
 
         /// <summary>
@@ -95,6 +124,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="422">If the provided reservation data is semantically invalid.</response>
         /// <response code="404">If the reservation to be updated was not found.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize]
         [HttpPut]
         [Route("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,7 +139,14 @@ namespace HotelManagementSystem.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(await _reservationService.UpdateAsync(reservation));
+            var userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is missing from the token.");
+            }
+
+            return Ok(await _reservationService.UpdateAsync(reservation, userId));
         }
     }
 }

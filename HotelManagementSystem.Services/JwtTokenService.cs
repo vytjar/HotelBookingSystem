@@ -9,11 +9,11 @@ namespace HotelManagementSystem.Services
 {
     public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
     {
-        private readonly int _accessTokenExpirationMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes");
-        private readonly int _refreshTokenExpirationDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays");
-        private readonly string? _audience = configuration["Jwt:ValidAudience"];
-        private readonly SymmetricSecurityKey _authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!));
-        private readonly string? _issuer = configuration["Jwt:ValidIssuer"];
+        private readonly int _accessTokenExpirationMinutes = configuration.GetValue<int>(Jwt.AccessTokenExpirationMinutes);
+        private readonly string? _audience = configuration[Jwt.ValidAudience];
+        private readonly SymmetricSecurityKey _authSigninKey = new(Encoding.UTF8.GetBytes(configuration[Jwt.Secret]!));
+        private readonly string? _issuer = configuration[Jwt.ValidIssuer];
+        private readonly int _refreshTokenExpirationDays = configuration.GetValue<int>(Jwt.RefreshTokenExpirationDays);
 
         public string CreateAccessToken(string userName, string userId, IEnumerable<string> roles)
         {

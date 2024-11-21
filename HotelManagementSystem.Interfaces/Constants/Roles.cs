@@ -8,7 +8,7 @@
 
         public const string User = "User";
 
-        public static IEnumerable<string> All =
+        public readonly static IEnumerable<string> All =
         [
             Admin,
             Manager,

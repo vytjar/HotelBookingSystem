@@ -12,8 +12,12 @@ namespace HotelManagementSystem.Api.Controllers
     public class UserController(IConfiguration configuration, IUserService userService) : Controller
     {
         private readonly IUserService _userService = userService;
-        private readonly int _refreshTokenExpirationDays = configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays");
+        private readonly int _refreshTokenExpirationDays = configuration.GetValue<int>(Jwt.RefreshTokenExpirationDays);
 
+        /// <summary>
+        /// Assigns a specified role to a user.
+        /// </summary>
+        /// <param name="request">Role assignment request</param>
         [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         [Route("AssignRole")]
@@ -34,6 +38,11 @@ namespace HotelManagementSystem.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Log in a user.
+        /// </summary>
+        /// <param name="request">Log in request.</param>
+        /// <returns>Access token.</returns>
         [HttpPost]
         [Route("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,6 +67,9 @@ namespace HotelManagementSystem.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Logs a user out
+        /// </summary>
         [HttpPost]
         [Route("Logout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,6 +92,10 @@ namespace HotelManagementSystem.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Refreshes users tokens
+        /// </summary>
+        /// <returns>Access token</returns>
         [HttpPost]
         [Route("Refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -104,6 +120,10 @@ namespace HotelManagementSystem.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Registers a new user with the "User" role
+        /// </summary>
+        /// <param name="request">Registration request</param>
         [HttpPost]
         [Route("Register")]
         [ProducesResponseType(StatusCodes.Status201Created)]

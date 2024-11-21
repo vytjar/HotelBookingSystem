@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HotelManagementSystem.Interfaces.Constants;
 using HotelManagementSystem.Interfaces.Dto;
 using HotelManagementSystem.Interfaces.Exceptions;
 using HotelManagementSystem.Interfaces.Services;
@@ -7,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagementSystem.Services
 {
-    public class ReservationService(HotelScope hotelScope, IMapper mapper) : IReservationService
+    public class ReservationService(HotelScope hotelScope, IMapper mapper, IUserService userService) : IReservationService
     {
         private readonly HotelScope _hotelScope = hotelScope;
         private readonly IMapper _mapper = mapper;
+        private readonly IUserService _userService = userService;
 
         public async Task<Reservation> CreateAsync(Reservation reservation)
         {
@@ -35,7 +37,7 @@ namespace HotelManagementSystem.Services
             return reservation;
         }
 
-        public async Task<Reservation> GetReservationAsync(int reservationId)
+        public async Task<Reservation> GetReservationAsync(int reservationId, string userId)
         {
             var reservation = _mapper.Map<Reservation>(await _hotelScope.DbContext.Reservations
                 .AsNoTracking()
@@ -45,6 +47,16 @@ namespace HotelManagementSystem.Services
             if (reservation is null)
             {
                 throw new NotFoundException($"Reservation {reservationId} could not be found");
+            }
+
+            if (!string.Equals(reservation.UserId, userId))
+            {
+                var roles = await _userService.GetUserRoles(userId);
+
+                if (!roles.Contains(Roles.Admin) || !roles.Contains(Roles.User))
+                {
+                    throw new ForbiddenException("Insufficient permissions.");
+                }
             }
 
             return reservation;
@@ -58,8 +70,10 @@ namespace HotelManagementSystem.Services
                 .Select(_mapper.Map<Reservation>);
         }
 
-        public async Task DeleteAsync(int reservationId)
+        public async Task DeleteAsync(int reservationId, string userId)
         {
+            var roles = await _userService.GetUserRoles(userId);
+
             var reservation = await _hotelScope.DbContext.Reservations
                 .Where(h => h.Id == reservationId)
                 .SingleOrDefaultAsync();
@@ -69,13 +83,43 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException($"Reservation {reservationId} could not be found");
             }
 
+            if (!string.Equals(reservation.UserId, userId) && !roles.Contains(Roles.Admin) && !roles.Contains(Roles.Manager))
+            {
+                throw new ForbiddenException("Insufficient permissions.");
+            }
+
             _hotelScope.DbContext.Reservations.Remove(reservation);
 
             await _hotelScope.DbContext.SaveChangesAsync();
         }
 
-        public async Task<Reservation> UpdateAsync(Reservation reservation)
+        public async Task<Reservation> UpdateAsync(Reservation reservation, string userId)
         {
+            var reservationOriginal = await _hotelScope.DbContext.Reservations
+                .AsNoTracking()
+                .Where(r => r.Id == reservation.Id)
+                .SingleOrDefaultAsync();
+
+            if (reservationOriginal is null)
+            {
+                throw new NotFoundException("Reservation not found.");
+            }
+
+            if (!string.Equals(reservationOriginal.UserId, userId) && (DateTime.Now - reservationOriginal.CheckInDate).Hours < 24)
+            {
+                var roles = await _userService.GetUserRoles(userId);
+
+                if (!roles.Contains(Roles.Admin) || !roles.Contains(Roles.Manager))
+                {
+                    throw new ForbiddenException("Insufficient permissions.");
+                }
+            }
+
+            if (!string.Equals(reservationOriginal.UserId, reservation.UserId))
+            {
+                throw new ValidationException("It is not allowed to assign reservation to another user.");
+            }
+
             await Validate(reservation);
 
             var reservationUpdated = _hotelScope.DbContext.Reservations.Update(_mapper.Map<Interfaces.Entities.Reservation>(reservation));
@@ -103,6 +147,7 @@ namespace HotelManagementSystem.Services
             }
 
             var room = await _hotelScope.DbContext.Rooms
+                .AsNoTracking()
                 .Where(r => r.Id == reservation.RoomId)
                 .SingleOrDefaultAsync();
 
@@ -117,7 +162,10 @@ namespace HotelManagementSystem.Services
             }
 
             var reservationOverlaps = await _hotelScope.DbContext.Reservations
-                .Where(r => r.RoomId == reservation.RoomId &&
+                .AsNoTracking()
+                .Where(r => 
+                    r.Id != reservation.Id &&
+                    r.RoomId == reservation.RoomId &&
                     r.CheckInDate < reservation.CheckOutDate &&
                     r.CheckOutDate > reservation.CheckInDate
                 )
