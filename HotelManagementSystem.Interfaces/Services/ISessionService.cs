@@ -1,4 +1,4 @@
-﻿using HotelManagementSystem.Interfaces.Dto.Requests;
+﻿using HotelManagementSystem.Interfaces.Dto.Requests.Authentication;
 
 namespace HotelManagementSystem.Services
 {

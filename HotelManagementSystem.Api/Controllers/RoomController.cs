@@ -21,7 +21,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="400">If the request is malformed.</response>
         /// <response code="422">If the provided room data is semantically invalid.</response>
         /// <response code="500">If there was an internal server error.</response>
-        [Authorize(Roles = $"{Roles.Admin}, {Roles.Manager}")]
+        [Authorize(Roles = $"{Roles.Admin}")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,7 +117,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="422">If the provided room data is semantically invalid.</response>
         /// <response code="404">If the room to be updated was not found.</response>
         /// <response code="500">If there was an internal server error.</response>
-        [Authorize(Roles = $"{Roles.Admin}, {Roles.Manager}")]
+        [Authorize(Roles = $"{Roles.Admin}")]
         [HttpPut]
         [Route("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]

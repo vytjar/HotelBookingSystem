@@ -1,4 +1,4 @@
-﻿using HotelManagementSystem.Interfaces.Dto.Requests;
+﻿using HotelManagementSystem.Interfaces.Dto.Requests.Authentication;
 using HotelManagementSystem.Interfaces.Dto.Responses;
 using HotelManagementSystem.Interfaces.Entities;
 

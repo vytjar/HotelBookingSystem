@@ -35,6 +35,24 @@ namespace HotelManagementSystem.Services.Repositories
                     await _userManager.AddToRolesAsync(user, Roles.All);
                 }
             }
+
+            if (await _userManager.FindByNameAsync("testUser") is null)
+            {
+                var user = new User
+                {
+                    Email = "user@user.com",
+                    Name = "John",
+                    Surname = "Doe",
+                    UserName = "testUser"
+                };
+
+                var result = await _userManager.CreateAsync(user, "Test@1234");
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRolesAsync(user, Roles.All);
+                }
+            }
         }
 
         public async Task AddDefaultRolesAsync()

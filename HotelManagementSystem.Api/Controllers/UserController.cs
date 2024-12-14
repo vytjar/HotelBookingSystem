@@ -1,6 +1,6 @@
 ﻿using HotelManagementSystem.Interfaces.Constants;
 using HotelManagementSystem.Interfaces.Dto;
-using HotelManagementSystem.Interfaces.Dto.Requests;
+using HotelManagementSystem.Interfaces.Dto.Requests.Authentication;
 using HotelManagementSystem.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

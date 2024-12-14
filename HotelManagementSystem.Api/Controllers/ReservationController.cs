@@ -1,4 +1,5 @@
 ﻿using HotelManagementSystem.Interfaces.Dto;
+using HotelManagementSystem.Interfaces.Dto.Requests;
 using HotelManagementSystem.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,23 @@ namespace HotelManagementSystem.Api.Controllers
             await _reservationService.DeleteAsync(reservationId, userId);
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Filters reservations.
+        /// </summary>
+        /// <param name="filterReservationsRequest">The filter request.</param>
+        /// <returns>A list of reservations.</returns>
+        /// <response code="200">The reservations were found and returned.</response>
+        /// <response code="500">If there is an internal server error.</response>
+        [HttpPost]
+        [Route("Filter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Filter(FilterReservationsRequest filterReservationsRequest)
+        {
+            return Ok(await _reservationService.FilterAsync(filterReservationsRequest));
         }
 
         /// <summary>

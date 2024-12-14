@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelManagementSystem.Interfaces.Constants;
 using HotelManagementSystem.Interfaces.Dto;
+using HotelManagementSystem.Interfaces.Dto.Requests;
 using HotelManagementSystem.Interfaces.Exceptions;
 using HotelManagementSystem.Interfaces.Services;
 using HotelManagementSystem.Services.Repositories;
@@ -35,6 +36,21 @@ namespace HotelManagementSystem.Services
             reservation.Id = reservationCreated.Entity.Id;
 
             return reservation;
+        }
+
+        public async Task<IEnumerable<Reservation>> FilterAsync(FilterReservationsRequest request)
+        {
+            if (request.From > request.To)
+            {
+                throw new ValidationException("From date can not be after the to date.");
+            }
+
+            return (await _hotelScope.DbContext.Reservations
+                .AsNoTracking()
+                .Where(r => r.RoomId == request.RoomId && r.CheckInDate >= request.From && r.CheckOutDate <= request.To)
+                .ToListAsync())
+                .Select(_mapper.Map<Reservation>)
+                .ToList();
         }
 
         public async Task<Reservation> GetReservationAsync(int reservationId, string userId)
@@ -83,7 +99,7 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException($"Reservation {reservationId} could not be found");
             }
 
-            if (!string.Equals(reservation.UserId, userId) && !roles.Contains(Roles.Admin) && !roles.Contains(Roles.Manager))
+            if (!string.Equals(reservation.UserId, userId) && !roles.Contains(Roles.Admin))
             {
                 throw new ForbiddenException("Insufficient permissions.");
             }
@@ -109,7 +125,7 @@ namespace HotelManagementSystem.Services
             {
                 var roles = await _userService.GetUserRoles(userId);
 
-                if (!roles.Contains(Roles.Admin) || !roles.Contains(Roles.Manager))
+                if (!roles.Contains(Roles.Admin))
                 {
                     throw new ForbiddenException("Insufficient permissions.");
                 }

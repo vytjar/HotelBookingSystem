@@ -1,4 +1,4 @@
-﻿namespace HotelManagementSystem.Interfaces.Dto.Requests
+﻿namespace HotelManagementSystem.Interfaces.Dto.Requests.Authentication
 {
     public class AssignRoleRequest
     {
