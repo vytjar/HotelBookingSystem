@@ -67,7 +67,7 @@ namespace HotelManagementSystem.Services
 
             if (!string.Equals(reservation.UserId, userId))
             {
-                var roles = await _userService.GetUserRoles(userId);
+                var roles = await _userService.GetUserRolesAsync(userId);
 
                 if (!roles.Contains(Roles.Admin) || !roles.Contains(Roles.User))
                 {
@@ -88,7 +88,7 @@ namespace HotelManagementSystem.Services
 
         public async Task DeleteAsync(int reservationId, string userId)
         {
-            var roles = await _userService.GetUserRoles(userId);
+            var roles = await _userService.GetUserRolesAsync(userId);
 
             var reservation = await _hotelScope.DbContext.Reservations
                 .Where(h => h.Id == reservationId)
@@ -123,7 +123,7 @@ namespace HotelManagementSystem.Services
 
             if (!string.Equals(reservationOriginal.UserId, userId) && (DateTime.Now - reservationOriginal.CheckInDate).Hours < 24)
             {
-                var roles = await _userService.GetUserRoles(userId);
+                var roles = await _userService.GetUserRolesAsync(userId);
 
                 if (!roles.Contains(Roles.Admin))
                 {

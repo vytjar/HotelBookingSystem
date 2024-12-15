@@ -1,8 +1,8 @@
 ﻿namespace HotelManagementSystem.Interfaces.Dto.Requests.Authentication
 {
-    public class AssignRoleRequest
+    public class AssignRolesRequest
     {
-        public required string Role { get; set; }
+        public IEnumerable<string> Roles { get; set; } = [];
 
         public required string UserName { get; set; }
     }

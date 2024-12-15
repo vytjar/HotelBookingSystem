@@ -6,18 +6,22 @@ namespace HotelManagementSystem.Interfaces.Services
 {
     public interface IUserService
     {
-        public Task AssignRoleAsync(AssignRoleRequest request);
+        Task AssignRolesAsync(AssignRolesRequest request);
 
-        public Task<User> GetUser(string userId);
+        Task<IEnumerable<User>> FilterAsync(FilterUsersRequest request);
 
-        public Task<IEnumerable<string>> GetUserRoles(string userId);
+        Task<IEnumerable<User>> GetAllAsync();
 
-        public Task<LoginResponse> LoginAsync(LoginRequest request);
+        Task<User> GetAsync(string userId);
 
-        public Task LogoutAsync(string refreshToken);
+        Task<IEnumerable<string>> GetUserRolesAsync(string userId);
 
-        public Task<RefreshTokensResponse> RefreshTokens(string refreshToken);
+        Task<LoginResponse> LoginAsync(LoginRequest request);
 
-        public Task RegisterAsync(RegisterRequest request);
+        Task LogoutAsync(string refreshToken);
+
+        Task<RefreshTokensResponse> RefreshTokens(string refreshToken);
+
+        Task RegisterAsync(RegisterRequest request);
     }
 }

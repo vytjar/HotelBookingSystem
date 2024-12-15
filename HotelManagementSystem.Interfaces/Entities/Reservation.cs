@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace HotelManagementSystem.Interfaces.Entities
+﻿namespace HotelManagementSystem.Interfaces.Entities
 {
     public class Reservation
     {
