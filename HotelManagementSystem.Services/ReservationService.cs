@@ -121,7 +121,7 @@ namespace HotelManagementSystem.Services
                 throw new NotFoundException("Reservation not found.");
             }
 
-            if (!string.Equals(reservationOriginal.UserId, userId) && (DateTime.Now - reservationOriginal.CheckInDate).Hours < 24)
+            if (!string.Equals(reservationOriginal.UserId, userId) || (DateTime.Now - reservationOriginal.CheckInDate).Hours < 24)
             {
                 var roles = await _userService.GetUserRolesAsync(userId);
 
@@ -131,10 +131,12 @@ namespace HotelManagementSystem.Services
                 }
             }
 
-            if (!string.Equals(reservationOriginal.UserId, reservation.UserId))
+            if (!string.IsNullOrEmpty(reservation.UserId) && !string.Equals(reservationOriginal.UserId, reservation.UserId))
             {
                 throw new ValidationException("It is not allowed to assign reservation to another user.");
             }
+
+            reservation.UserId = userId;
 
             await Validate(reservation);
 
