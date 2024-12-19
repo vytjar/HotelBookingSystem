@@ -13,20 +13,28 @@ namespace HotelManagementSystem.Services.Configurations
                 t.HasCheckConstraint("CK_Registration_CheckOutDate", "\"CheckOutDate\" > \"CheckInDate\"");
             });
 
-            builder.HasKey(reg => reg.Id);
+            builder.HasKey(r => r.Id);
 
-            builder.Property(reg => reg.GuestCount)
+            builder
+                .Property(r => r.GuestCount)
                 .IsRequired();
 
-            builder.Property(reg => reg.CheckInDate)
+            builder
+                .Property(r => r.CheckInDate)
+                .IsRequired();  
+
+            builder.Property(r => r.CheckOutDate)
                 .IsRequired();
 
-            builder.Property(reg => reg.CheckOutDate)
-                .IsRequired();
-
-            builder.HasOne(reg => reg.Room)
+            builder
+                .HasOne(r => r.Room)
                 .WithMany(r => r.Reservations)
-                .HasForeignKey(reg => reg.RoomId);
+                .HasForeignKey(r => r.RoomId);
+
+            builder
+                .HasOne(r => r.User)
+                .WithMany(u => u.Reservations)
+                .HasForeignKey(r => r.UserId);
         }
     }
 }

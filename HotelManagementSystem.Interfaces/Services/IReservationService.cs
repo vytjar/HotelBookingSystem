@@ -1,4 +1,5 @@
 ﻿using HotelManagementSystem.Interfaces.Dto;
+using HotelManagementSystem.Interfaces.Dto.Requests;
 
 namespace HotelManagementSystem.Interfaces.Services
 {
@@ -6,12 +7,14 @@ namespace HotelManagementSystem.Interfaces.Services
     {
         Task<Reservation> CreateAsync(Reservation reservation);
 
-        Task<Reservation> GetReservationAsync(int reservationId);
+        Task<IEnumerable<Reservation>> FilterAsync(FilterReservationsRequest request); 
+
+        Task<Reservation> GetReservationAsync(int reservationId, string userId);
 
         Task<IEnumerable<Reservation>> GetReservationsAsync();
 
-        Task DeleteAsync(int reservationId);
+        Task DeleteAsync(int reservationId, string userId);
 
-        Task<Reservation> UpdateAsync(Reservation reservation);
+        Task<Reservation> UpdateAsync(Reservation reservation, string userId);
     }
 }

@@ -12,15 +12,18 @@ namespace HotelManagementSystem.Services.Configurations
 
             builder.HasKey(h => h.Id);
 
-            builder.Property(h => h.Name)
+            builder
+                .Property(h => h.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(h => h.Address)
+            builder
+                .Property(h => h.Address)
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.HasMany(h => h.Rooms)
+            builder
+                .HasMany(h => h.Rooms)
                 .WithOne(r => r.Hotel)
                 .HasForeignKey(r => r.HotelId)
                 .OnDelete(DeleteBehavior.Cascade);

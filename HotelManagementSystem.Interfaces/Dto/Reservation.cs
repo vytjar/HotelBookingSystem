@@ -1,4 +1,6 @@
-﻿namespace HotelManagementSystem.Interfaces.Dto
+﻿using HotelManagementSystem.Interfaces.Entities;
+
+namespace HotelManagementSystem.Interfaces.Dto
 {
     public class Reservation
     {
@@ -13,5 +15,9 @@
         public Room? Room { get; set; }
 
         public required int RoomId { get; set; }
+
+        public string? UserId { get; set; }
+
+        public User? User { get; set; }
     }
 }

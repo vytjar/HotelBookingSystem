@@ -1,16 +1,19 @@
 ﻿using HotelManagementSystem.Interfaces.Entities;
 using HotelManagementSystem.Services.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Permissions;
 
 namespace HotelManagementSystem.Services.Repositories
 {
-    public class HotelDbContext : DbContext
+    public class HotelDbContext : IdentityDbContext<User>
     {
         public HotelDbContext(DbContextOptions<HotelDbContext> options) : base(options) { }
 
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

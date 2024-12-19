@@ -54,6 +54,7 @@ namespace HotelManagementSystem.Services
         {
              var room = _mapper.Map<Room>(await _hotelScope.DbContext.Rooms
                 .AsNoTracking()
+                .Include(r => r.Hotel)
                 .Where(r => r.Id == roomId)
                 .SingleOrDefaultAsync());
 

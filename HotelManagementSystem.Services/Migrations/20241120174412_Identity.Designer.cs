@@ -3,6 +3,7 @@ using System;
 using HotelManagementSystem.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HotelManagementSystem.Services.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    partial class HotelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120174412_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,36 +108,6 @@ namespace HotelManagementSystem.Services.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("Rooms", (string)null);
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Interfaces.Entities.Session", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("InitiatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Revoked")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Interfaces.Entities.User", b =>
@@ -371,17 +344,6 @@ namespace HotelManagementSystem.Services.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("HotelManagementSystem.Interfaces.Entities.Session", b =>
-                {
-                    b.HasOne("HotelManagementSystem.Interfaces.Entities.User", "User")
-                        .WithMany("Sessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -446,8 +408,6 @@ namespace HotelManagementSystem.Services.Migrations
             modelBuilder.Entity("HotelManagementSystem.Interfaces.Entities.User", b =>
                 {
                     b.Navigation("Reservations");
-
-                    b.Navigation("Sessions");
                 });
 #pragma warning restore 612, 618
         }
