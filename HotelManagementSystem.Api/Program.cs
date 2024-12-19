@@ -10,7 +10,11 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 builder.Services
     .AddControllers(options =>
@@ -36,7 +40,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddLogging();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddServices(builder.Configuration);
 

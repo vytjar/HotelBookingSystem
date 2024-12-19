@@ -17,6 +17,11 @@ namespace HotelManagementSystem.Services.Repositories
             // Retrieve the connection string
             var connectionString = configuration.GetConnectionString("AzureDb");
 
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new System.ArgumentException($"Connection string not found {Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AzureDb")}");
+            }
+
             var optionsBuilder = new DbContextOptionsBuilder<HotelDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
 
