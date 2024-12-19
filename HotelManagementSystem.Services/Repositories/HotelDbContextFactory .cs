@@ -8,15 +8,7 @@ namespace HotelManagementSystem.Services.Repositories
     {
         public HotelDbContext CreateDbContext(string[] args)
         {
-            // Set up configuration to read from appsettings.json
-            //IConfigurationRoot configuration = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile("appsettings.json")
-            //    .Build();
-
-            // Retrieve the connection string
-            //var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AzureDb");
-            var connectionString = configuration.GetConnectionString("AzureDb");
+            var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AzureDb");
 
             if (string.IsNullOrEmpty(connectionString))
             {
