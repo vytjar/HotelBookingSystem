@@ -15,9 +15,8 @@ namespace HotelManagementSystem.Services.Repositories
             //    .Build();
 
             // Retrieve the connection string
-            var connectionString = configuration.GetConnectionString("POSTGRESQLCONNSTR_AzureDb");
+            var connectionString = configuration.GetConnectionString("AzureDb");
 
-            // Set up DbContextOptions with the Npgsql provider for PostgreSQL
             var optionsBuilder = new DbContextOptionsBuilder<HotelDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
 
