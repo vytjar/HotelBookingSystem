@@ -13,5 +13,9 @@
         public Room? Room { get; set; }
 
         public required int RoomId { get; set; }
+
+        public required string UserId { get; set; }
+
+        public required User User { get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿using HotelManagementSystem.Interfaces.Dto;
+﻿using HotelManagementSystem.Interfaces.Constants;
+using HotelManagementSystem.Interfaces.Dto;
 using HotelManagementSystem.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Api.Controllers
@@ -19,6 +21,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="400">If the request is malformed.</response>
         /// <response code="422">If the provided hotel data is semantically invalid.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,6 +44,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="204">The hotel was successfully deleted.</response>
         /// <response code="404">If the hotel with the given ID was not found.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         [Route("{hotelId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -113,6 +117,7 @@ namespace HotelManagementSystem.Api.Controllers
         /// <response code="422">If the provided hotel data is semantically invalid.</response>
         /// <response code="404">If the hotel to be updated was not found.</response>
         /// <response code="500">If there was an internal server error.</response>
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut]
         [Route("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]

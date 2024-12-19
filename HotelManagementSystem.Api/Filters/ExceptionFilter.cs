@@ -1,4 +1,5 @@
 ﻿using HotelManagementSystem.Interfaces.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -17,6 +18,10 @@ namespace HotelManagementSystem.Api.Filters
                 ArgumentNullException => new ObjectResult(new { message = context.Exception.Message })
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
+                },
+                ForbiddenException => new ObjectResult(new { message = context.Exception.Message })
+                {
+                    StatusCode = StatusCodes.Status403Forbidden
                 },
                 NotFoundException => new NotFoundObjectResult(context.Exception.Message),
                 ValidationException => new UnprocessableEntityObjectResult(context.Exception.Message),
