@@ -12,6 +12,12 @@ namespace HotelManagementSystem.Services.Utils
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("AzureDb");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new System.ArgumentException($"Connection string not found {Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AzureDb")}");
+            }
+
             services.AddDbContext<HotelDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
