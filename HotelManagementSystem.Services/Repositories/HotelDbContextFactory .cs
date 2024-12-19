@@ -15,7 +15,7 @@ namespace HotelManagementSystem.Services.Repositories
             //    .Build();
 
             // Retrieve the connection string
-            var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AzureDb";
+            var connectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_AzureDb");
 
             if (string.IsNullOrEmpty(connectionString))
             {
