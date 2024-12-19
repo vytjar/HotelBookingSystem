@@ -680,6 +680,117 @@ This document provides an overview of the Hotel Management System API, including
 }
 ```
 
+# Hotel Management System API (Continued)
+
+...
+
+##### 422 Client Error (Continued)
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/validation-error",
+  "title": "Validation Error",
+  "status": 422,
+  "detail": "Capacity must be greater than zero and room number must be unique."
+}
+```
+
+##### 404 Not Found
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/not-found",
+  "title": "Room Not Found",
+  "status": 404,
+  "detail": "Room with ID 100 not found."
+}
+```
+
+##### 500 Server Error
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/internal-server-error",
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "An unexpected error occurred."
+}
+```
+
+---
+
+### Delete a Room
+**Endpoint:** `DELETE /Api/Rooms/{roomId}`
+
+#### Response Codes
+##### 204 No Content
+**Response:** _(No Content)_
+
+##### 404 Not Found
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/not-found",
+  "title": "Room Not Found",
+  "status": 404,
+  "detail": "Room with ID 100 not found."
+}
+```
+
+##### 500 Server Error
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/internal-server-error",
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "An unexpected error occurred."
+}
+```
+
+---
+
+## Users API
+
+### Register a User
+**Endpoint:** `POST /Api/Users/Register`
+
+#### Response Codes
+##### 201 Created
+**Request:**
+```json
+{
+  "userName": "jdoe",
+  "password": "SecurePass123!",
+  "passwordConfirmation": "SecurePass123!",
+  "email": "jdoe@example.com",
+  "name": "John",
+  "surname": "Doe"
+}
+```
+
+**Response:**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "userName": "jdoe",
+  "email": "jdoe@example.com",
+  "name": "John",
+  "surname": "Doe"
+}
+```
+
+##### 400 Bad Request
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/invalid-data",
+  "title": "Invalid Data",
+  "status": 400,
+  "detail": "Passwords do not match."
+}
+```
+
 ##### 422 Client Error
 **Response:**
 ```json
@@ -687,4 +798,87 @@ This document provides an overview of the Hotel Management System API, including
   "type": "https://example.com/probs/validation-error",
   "title": "Validation Error",
   "status": 422,
-  "detail": "Capacity must
+  "detail": "Password must contain at least 8 characters, including uppercase, lowercase, a digit, and a special character."
+}
+```
+
+##### 500 Server Error
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/internal-server-error",
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "An unexpected error occurred."
+}
+```
+
+---
+
+### Login a User
+**Endpoint:** `POST /Api/Users/Login`
+
+#### Response Codes
+##### 200 Success
+**Request:**
+```json
+{
+  "userName": "jdoe",
+  "password": "SecurePass123!"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "dGhpc2lzYXJlZnJlc2h0b2tlbg=="
+}
+```
+
+##### 400 Bad Request
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/invalid-data",
+  "title": "Invalid Credentials",
+  "status": 400,
+  "detail": "The username or password is incorrect."
+}
+```
+
+##### 500 Server Error
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/internal-server-error",
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "An unexpected error occurred."
+}
+```
+
+---
+
+### Logout a User
+**Endpoint:** `POST /Api/Users/Logout`
+
+#### Response Codes
+##### 200 Success
+**Response:** _(No Content)_
+
+##### 500 Server Error
+**Response:**
+```json
+{
+  "type": "https://example.com/probs/internal-server-error",
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "An unexpected error occurred."
+}
+```
+
+---
+
+This concludes the comprehensive documentation for the Hotel Management System API. For additional details or clarifications, please refer to the API source or contact the support team.
+
