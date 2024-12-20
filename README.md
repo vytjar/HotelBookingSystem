@@ -220,23 +220,24 @@
 **Request:**
 ```json
 {
-  "roomId": 101,
-  "userId": "abc123",
-  "checkInDate": "2024-12-25T14:00:00",
-  "checkOutDate": "2024-12-30T10:00:00",
-  "guestCount": 2
+  "checkInDate": "2024-12-21",
+  "checkOutDate": "2024-12-22",
+  "guestCount": 2,
+  "roomId": 12
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": 1,
-  "roomId": 101,
-  "userId": "abc123",
-  "checkInDate": "2024-12-25T14:00:00",
-  "checkOutDate": "2024-12-30T10:00:00",
-  "guestCount": 2
+  "checkInDate": "2024-12-21T00:00:00",
+  "checkOutDate": "2024-12-22T00:00:00",
+  "guestCount": 2,
+  "id": 50,
+  "room": null,
+  "roomId": 12,
+  "userId": "9cd39d64-0273-4b34-8705-5abd4f652313",
+  "user": null
 }
 ```
 
@@ -244,10 +245,18 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
-  "status": 400,
-  "detail": "Check-in date must be before check-out date."
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+    "title": "One or more validation errors occurred.",
+    "status": 400,
+    "errors": {
+        "$": [
+            "JSON deserialization for type 'HotelManagementSystem.Interfaces.Dto.Reservation' was missing required properties, including the following: checkOutDate"
+        ],
+        "reservation": [
+            "The reservation field is required."
+        ]
+    },
+    "traceId": "00-441dc9701676b219b3d6641d87bae433-98aaa073f014089c-00"
 }
 ```
 
@@ -255,21 +264,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
   "status": 422,
-  "detail": "Room ID must be valid."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Check out date 2024-12-12 can not be before or on the same day as the check in date 2024-12-16"
 }
 ```
 
@@ -284,12 +280,24 @@
 ```json
 [
   {
+    "checkInDate": "2024-12-16T02:00:00Z",
+    "checkOutDate": "2024-12-17T02:00:00Z",
+    "guestCount": 1,
     "id": 1,
-    "roomId": 101,
-    "userId": "abc123",
-    "checkInDate": "2024-12-25T14:00:00",
-    "checkOutDate": "2024-12-30T10:00:00",
-    "guestCount": 2
+    "room": null,
+    "roomId": 12,
+    "userId": "9cd39d64-0273-4b34-8705-5abd4f652313",
+    "user": null
+  },
+  {
+    "checkInDate": "2024-10-01T14:00:00Z",
+    "checkOutDate": "2024-10-03T11:00:00Z",
+    "guestCount": 2,
+    "id": 2,
+    "room": null,
+    "roomId": 3,
+    "userId": "7ab5d8f1-1374-4335-abd1-ebccecccdf71",
+    "user": null
   }
 ]
 ```
@@ -304,12 +312,14 @@
 **Response:**
 ```json
 {
-  "id": 1,
-  "roomId": 101,
-  "userId": "abc123",
-  "checkInDate": "2024-12-25T14:00:00",
-  "checkOutDate": "2024-12-30T10:00:00",
-  "guestCount": 2
+  "checkInDate": "2024-10-01T14:00:00Z",
+  "checkOutDate": "2024-10-03T11:00:00Z",
+  "guestCount": 2,
+  "id": 2,
+  "room": null,
+  "roomId": 3,
+  "userId": "7ab5d8f1-1374-4335-abd1-ebccecccdf71",
+  "user": null
 }
 ```
 
@@ -317,21 +327,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Reservation Not Found",
   "status": 404,
-  "detail": "Reservation with ID 200 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Reservation 55 could not be found"
 }
 ```
 
@@ -345,24 +342,24 @@
 **Request:**
 ```json
 {
-  "id": 1,
-  "roomId": 101,
-  "userId": "abc123",
-  "checkInDate": "2024-12-26T14:00:00",
-  "checkOutDate": "2024-12-31T10:00:00",
-  "guestCount": 2
+  "checkInDate": "2024-12-21T00:00:00",
+  "checkOutDate": "2024-12-22T00:00:00",
+  "guestCount": 2,
+  "id": 50,
+  "roomId": 12
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": 1,
-  "roomId": 101,
-  "userId": "abc123",
-  "checkInDate": "2024-12-26T14:00:00",
-  "checkOutDate": "2024-12-31T10:00:00",
-  "guestCount": 2
+  "checkInDate": "2024-12-21T00:00:00Z",
+  "checkOutDate": "2024-12-22T00:00:00Z",
+  "guestCount": 2,
+  "id": 50,
+  "room": null,
+  "roomId": 12,
+  "userId": "9cd39d64-0273-4b34-8705-5abd4f652313"
 }
 ```
 
@@ -370,10 +367,18 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
   "status": 400,
-  "detail": "Check-in date must be before check-out date."
+  "errors": {
+      "$": [
+          "JSON deserialization for type 'HotelManagementSystem.Interfaces.Dto.Reservation' was missing required properties, including the following: roomId"
+      ],
+      "reservation": [
+          "The reservation field is required."
+      ]
+  },
+  "traceId": "00-bbdcc6215b556014490edd9714739412-6e14f2cd4bbd41ed-00"
 }
 ```
 
@@ -381,10 +386,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
   "status": 422,
-  "detail": "Room ID must be valid."
+  "detail": "Guest count -1 can not be lower than 1"
 }
 ```
 
@@ -392,21 +395,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Reservation Not Found",
   "status": 404,
-  "detail": "Reservation with ID 200 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Room 5000 could not be found"
 }
 ```
 
@@ -423,21 +413,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Reservation Not Found",
   "status": 404,
-  "detail": "Reservation with ID 200 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Reservation 500 could not be found"
 }
 ```
 
@@ -453,19 +430,21 @@
 **Request:**
 ```json
 {
-  "roomNumber": "202",
-  "capacity": 3,
-  "hotelId": 1
+  "capacity": 2,
+  "hotelId": 1,
+  "roomNumber": "T2"
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": 2,
-  "roomNumber": "202",
-  "capacity": 3,
-  "hotelId": 1
+  "capacity": 2,
+  "hotel": null,
+  "hotelId": 1,
+  "id": 24,
+  "reservations": [],
+  "roomNumber": "T2"
 }
 ```
 
@@ -473,10 +452,18 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
   "status": 400,
-  "detail": "Room number must be provided."
+  "errors": {
+      "$": [
+          "JSON deserialization for type 'HotelManagementSystem.Interfaces.Dto.Room' was missing required properties, including the following: hotelId"
+      ],
+      "room": [
+          "The room field is required."
+      ]
+  },
+  "traceId": "00-fdecde71a1ac0c64e4ddd5fa619fd234-31eb9294f5b2d246-00"
 }
 ```
 
@@ -484,21 +471,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
-  "status": 422,
-  "detail": "Capacity must be greater than zero."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "status": 422
+  "detail": "Room capacity -5 can not be lower than 1"
 }
 ```
 
@@ -513,29 +487,30 @@
 ```json
 [
   {
-    "id": 1,
-    "roomNumber": "101",
-    "capacity": 2,
-    "hotelId": 1
+      "capacity": 2,
+      "hotel": null,
+      "hotelId": 3,
+      "id": 1,
+      "reservations": [],
+      "roomNumber": "asd-3"
   },
   {
-    "id": 2,
-    "roomNumber": "202",
-    "capacity": 3,
-    "hotelId": 1
+      "capacity": 2,
+      "hotel": null,
+      "hotelId": 3,
+      "id": 2,
+      "reservations": [],
+      "roomNumber": "asd"
+  },
+  {
+      "capacity": 2,
+      "hotel": null,
+      "hotelId": 1,
+      "id": 3,
+      "reservations": [],
+      "roomNumber": "101"
   }
 ]
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
-}
 ```
 
 ---
@@ -548,10 +523,19 @@
 **Response:**
 ```json
 {
-  "id": 1,
-  "roomNumber": "101",
   "capacity": 2,
-  "hotelId": 1
+  "hotel": {
+      "address": "124 Main St, New York, NY",
+      "id": 3,
+      "name": "The Grand",
+      "rooms": [
+          null
+      ]
+  },
+  "hotelId": 3,
+  "id": 4,
+  "reservations": [],
+  "roomNumber": "105"
 }
 ```
 
@@ -559,21 +543,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Room Not Found",
   "status": 404,
-  "detail": "Room with ID 50 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Room 5000 could not be found"
 }
 ```
 
@@ -587,20 +558,30 @@
 **Request:**
 ```json
 {
-  "id": 1,
-  "roomNumber": "101A",
-  "capacity": 2,
-  "hotelId": 1
+  "capacity": 3,
+  "hotelId": 1,
+  "id": 24,
+  "reservations": [],
+  "roomNumber": "T2"
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": 1,
-  "roomNumber": "101A",
-  "capacity": 2,
-  "hotelId": 1
+    "capacity": 3,
+    "hotel": {
+        "address": "124 Main St, New York, NY",
+        "id": 1,
+        "name": "The Grand New York",
+        "rooms": [
+            null
+        ]
+    },
+    "hotelId": 1,
+    "id": 24,
+    "reservations": [],
+    "roomNumber": "T2"
 }
 ```
 
@@ -608,14 +589,20 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
-  "status": 400,
-  "detail": "Room ID must be provided."
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+    "title": "One or more validation errors occurred.",
+    "status": 400,
+    "errors": {
+        "$": [
+            "JSON deserialization for type 'HotelManagementSystem.Interfaces.Dto.Room' was missing required properties, including the following: hotelId"
+        ],
+        "room": [
+            "The room field is required."
+        ]
+    },
+    "traceId": "00-6599e2605db8576fa895cdd10fb765d0-fc84825fa0a86b93-00"
 }
 ```
-
-# Hotel Management System API (Continued)
 
 ...
 
@@ -623,10 +610,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
   "status": 422,
-  "detail": "Capacity must be greater than zero and room number must be unique."
+  "detail": "Room capacity -1 can not be lower than 1"
 }
 ```
 
@@ -634,21 +619,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Room Not Found",
   "status": 404,
-  "detail": "Room with ID 100 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Room 200 could not be found"
 }
 ```
 
@@ -665,21 +637,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Room Not Found",
   "status": 404,
-  "detail": "Room with ID 100 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Room 200 could not be found"
 }
 ```
 
@@ -691,27 +650,16 @@
 **Endpoint:** `POST /Api/Users/Register`
 
 #### Response Codes
-##### 201 Created
+##### 204 No Content
 **Request:**
 ```json
 {
-  "userName": "jdoe",
-  "password": "SecurePass123!",
-  "passwordConfirmation": "SecurePass123!",
-  "email": "jdoe@example.com",
-  "name": "John",
-  "surname": "Doe"
-}
-```
-
-**Response:**
-```json
-{
-  "id": "123e4567-e89b-12d3-a456-426614174000",
-  "userName": "jdoe",
-  "email": "jdoe@example.com",
-  "name": "John",
-  "surname": "Doe"
+  "email": "user2@test.com",
+  "name": "user2",
+  "surname": "user2",
+  "password": "Test@1234",
+  "passwordConfirmation": "Test@1234",
+  "username": "user2"
 }
 ```
 
@@ -719,10 +667,18 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
-  "status": 400,
-  "detail": "Passwords do not match."
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+    "title": "One or more validation errors occurred.",
+    "status": 400,
+    "errors": {
+        "$": [
+            "The JSON object contains a trailing comma at the end which is not supported in this mode. Change the reader options. Path: $ | LineNumber: 6 | BytePositionInLine: 0."
+        ],
+        "request": [
+            "The request field is required."
+        ]
+    },
+    "traceId": "00-73da065a77d15f5a60045be04529e3df-3acdc5d3a4c10671-00"
 }
 ```
 
@@ -730,10 +686,8 @@
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
   "status": 422,
-  "detail": "Password must contain at least 8 characters, including uppercase, lowercase, a digit, and a special character."
+  "detail": "User user2 already exists."
 }
 ```
 
@@ -747,16 +701,15 @@
 **Request:**
 ```json
 {
-  "userName": "jdoe",
-  "password": "SecurePass123!"
+  "password": "Test@1234",
+  "username": "test"
 }
 ```
 
 **Response:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "dGhpc2lzYXJlZnJlc2h0b2tlbg=="
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxYjVhMDhkYi1iOWQ0LTQ2MWEtOGVhZC1hYjlmYmJkMDhiNjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJzdWIiOiI5Y2QzOWQ2NC0wMjczLTRiMzQtODcwNS01YWJkNGY2NTIzMTMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWRtaW4iLCJVc2VyIl0sImV4cCI6MTczNDY1NTk2MCwiaXNzIjoiSG90ZWxNYW5hZ2VtZW55U3lzdGVtIiwiYXVkIjoiVHJ1c3RlZENsaWVudCJ9.BVkmMB-9r133JKUKB3BZjwXs4aWiiGuKqovwNJw8-44"
 }
 ```
 
@@ -793,3 +746,88 @@
 
 ---
 
+### Refresh token
+**Endpoint:** `POST /Api/Users/Refresh`
+
+#### Response Codes
+##### 200 Success
+**Response:**
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0OTZiNmFiNi0xMmExLTQzNWQtYTVlMy00NjcwMjJlNDkwNGYiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJzdWIiOiI5Y2QzOWQ2NC0wMjczLTRiMzQtODcwNS01YWJkNGY2NTIzMTMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWRtaW4iLCJVc2VyIl0sImV4cCI6MTczNDY1NjAwMSwiaXNzIjoiSG90ZWxNYW5hZ2VtZW55U3lzdGVtIiwiYXVkIjoiVHJ1c3RlZENsaWVudCJ9.0Z5Vv1Zv2Fyl3yxEp5kvahaxd3QtYY2mTbGt1VeE6PU"
+}
+```
+
+---
+
+### Get current user
+**Endpoint:** `GET Api/Users`
+#### Response Codes
+##### 200 Success
+**Response:**
+```json
+{
+    "email": "admin@admin.com",
+    "id": "9cd39d64-0273-4b34-8705-5abd4f652313",
+    "name": "admin",
+    "surname": "admin",
+    "roles": [
+        "Admin",
+        "User"
+    ],
+    "username": "admin"
+}
+```
+
+---
+
+### Filter users
+**Endpoint:** `PUT /Api/Users/Filter`
+
+#### Response Codes
+##### 200 Success
+**Request:**
+```json
+{
+    "name": "user"
+}
+```
+
+**Response:**
+```json
+[
+    {
+        "email": "user@user.user",
+        "id": "928e0c0c-edcb-4a75-8633-3d9ec0889342",
+        "name": "user",
+        "surname": "user",
+        "reservations": [],
+        "roles": [
+            "User"
+        ],
+        "username": "user"
+    },
+    {
+        "email": "newUser@user.user",
+        "id": "5de77e5a-ebb9-405f-9122-798302d206aa",
+        "name": "user",
+        "surname": "user",
+        "reservations": [],
+        "roles": [
+            "User"
+        ],
+        "username": "newUser"
+    },
+    {
+        "email": "user2@test.com",
+        "id": "148532ea-4e02-40cc-af7c-0d5f84f3f7a0",
+        "name": "user2",
+        "surname": "user2",
+        "reservations": [],
+        "roles": [
+            "User"
+        ],
+        "username": "user2"
+    }
+]
+```
