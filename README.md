@@ -4,14 +4,12 @@
 - Viešbutis → Kambarys → Rezervacija
 
 ## Rolės:
--Svečias:
-  Gali peržiūrėti viešbučius ir kambarių užimtumą.
-- Naudotojas
-  Gali rezervuoti kambarius, peržiūrėti jau atliktas rezervacijas ir jas atšaukti.
--Administratorius
-  Gali valdyti valdyti viešbučius.
-  Gali valdyti viešbučių kambarius.
-  Gali valdyti visas rezervacijas.
+- Svečias: Gali peržiūrėti viešbučius ir kambarių užimtumą.
+- Naudotojas: Gali rezervuoti kambarius, peržiūrėti jau atliktas rezervacijas ir jas atšaukti.
+- Administratorius
+    Gali valdyti valdyti viešbučius.
+    Gali valdyti viešbučių kambarius.
+    Gali valdyti visas rezervacijas.
 
 
 ## Naudojamos technologijos
