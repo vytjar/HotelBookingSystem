@@ -1,5 +1,3 @@
----
-
 ## Table of Contents
 - [Hotels API](#hotels-api)
 - [Reservations API](#reservations-api)
