@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost3000", policy =>
     {
-        policy.WithOrigins(Environment.GetEnvironmentVariable("CorsOrigins") ?? "localhost:3000")
+        policy.WithOrigins(Environment.GetEnvironmentVariable("CorsOrigins") ?? "http://localhost:3000/hotels")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
