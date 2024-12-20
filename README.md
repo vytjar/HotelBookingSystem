@@ -1,7 +1,3 @@
-# Hotel Management System API
-
-This document provides an overview of the Hotel Management System API, including endpoints, request methods, response codes, and examples.
-
 ---
 
 ## Table of Contents
@@ -22,30 +18,18 @@ This document provides an overview of the Hotel Management System API, including
 **Request:**
 ```json
 {
-  "name": "Sunrise Inn",
-  "address": "123 Ocean Drive",
-  "rooms": [
-    {
-      "roomNumber": "101",
-      "capacity": 2
-    }
-  ]
+  "address": "125 Main St, New York, NY",
+  "name": "The Grand New York"
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": 1,
-  "name": "Sunrise Inn",
-  "address": "123 Ocean Drive",
-  "rooms": [
-    {
-      "id": 10,
-      "roomNumber": "101",
-      "capacity": 2
-    }
-  ]
+  "address": "125 Main St, New York, NY",
+  "id": 11,
+  "name": "The Grand New York",
+  "rooms": []
 }
 ```
 
@@ -53,10 +37,18 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
   "status": 400,
-  "detail": "Hotel name is required."
+  "errors": {
+      "$": [
+          "JSON deserialization for type 'HotelManagementSystem.Interfaces.Dto.Hotel' was missing required properties, including the following: name"
+      ],
+      "hotel": [
+          "The hotel field is required."
+      ]
+  },
+  "traceId": "00-77775aba02c1dbcfd23c4e7a2bba878f-c70aa6f6cae4aa04-00"
 }
 ```
 
@@ -64,21 +56,8 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
   "status": 422,
-  "detail": "Room capacity must be a positive integer."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Hotel with address 125 Main St, New York, NY and name The Grand New York already exists"
 }
 ```
 
@@ -93,27 +72,36 @@ This document provides an overview of the Hotel Management System API, including
 ```json
 [
   {
-    "id": 1,
-    "name": "Sunrise Inn",
-    "address": "123 Ocean Drive"
+      "address": "457 Ocean Ave, Miami, FL",
+      "id": 2,
+      "name": "The Miami Seaside",
+      "rooms": []
   },
   {
-    "id": 2,
-    "name": "Mountain Retreat",
-    "address": "456 Alpine Lane"
+      "address": "124 Main St, New York, NY",
+      "id": 3,
+      "name": "The Grand",
+      "rooms": []
+  },
+  {
+      "address": "124 Main St, New York, NY",
+      "id": 1,
+      "name": "The Grand New York",
+      "rooms": []
+  },
+  {
+      "address": "Test st. 156, City",
+      "id": 10,
+      "name": "hotel test 1",
+      "rooms": []
+  },
+  {
+      "address": "125 Main St, New York, NY",
+      "id": 11,
+      "name": "The Grand New York",
+      "rooms": []
   }
 ]
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
-}
 ```
 
 ---
@@ -126,16 +114,10 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
+  "address": "124 Main St, New York, NY",
   "id": 1,
-  "name": "Sunrise Inn",
-  "address": "123 Ocean Drive",
-  "rooms": [
-    {
-      "id": 10,
-      "roomNumber": "101",
-      "capacity": 2
-    }
-  ]
+  "name": "The Grand New York",
+  "rooms": []
 }
 ```
 
@@ -143,24 +125,10 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Hotel Not Found",
   "status": 404,
-  "detail": "Hotel with ID 100 not found."
+  "detail": "Hotel 150 could not be found."
 }
 ```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
-}
-```
-
 ---
 
 ### Update a Hotel
@@ -171,18 +139,18 @@ This document provides an overview of the Hotel Management System API, including
 **Request:**
 ```json
 {
-  "id": 1,
-  "name": "Sunrise Inn - Updated",
-  "address": "456 Ocean Drive"
+  "address": "125 Main St, New York, N",
+  "id": 11,
+  "name": "The Grand New York"
 }
 ```
 
 **Response:**
 ```json
 {
-  "id": 1,
-  "name": "Sunrise Inn - Updated",
-  "address": "456 Ocean Drive",
+  "address": "125 Main St, New York, N",
+  "id": 11,
+  "name": "The Grand New York",
   "rooms": []
 }
 ```
@@ -191,10 +159,18 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/invalid-data",
-  "title": "Invalid Data",
-  "status": 400,
-  "detail": "Hotel ID must be provided."
+    "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+    "title": "One or more validation errors occurred.",
+    "status": 400,
+    "errors": {
+        "$": [
+            "JSON deserialization for type 'HotelManagementSystem.Interfaces.Dto.Hotel' was missing required properties, including the following: address"
+        ],
+        "hotel": [
+            "The hotel field is required."
+        ]
+    },
+    "traceId": "00-5855db42c38ea9a5b2f343c0efc826b1-a3534a9545dbe2c1-00"
 }
 ```
 
@@ -202,10 +178,8 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/validation-error",
-  "title": "Validation Error",
   "status": 422,
-  "detail": "Hotel name must be between 1 and 100 characters."
+  "detail": "Hotel with address 125 Main St, New York, N and name The Grand New York already exists."
 }
 ```
 
@@ -213,21 +187,8 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Hotel Not Found",
   "status": 404,
-  "detail": "Hotel with ID 100 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Hotel 50 could not be found"
 }
 ```
 
@@ -244,21 +205,8 @@ This document provides an overview of the Hotel Management System API, including
 **Response:**
 ```json
 {
-  "type": "https://example.com/probs/not-found",
-  "title": "Hotel Not Found",
   "status": 404,
-  "detail": "Hotel with ID 100 not found."
-}
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
+  "detail": "Hotel 50 could not be found"
 }
 ```
 
@@ -346,17 +294,6 @@ This document provides an overview of the Hotel Management System API, including
     "guestCount": 2
   }
 ]
-```
-
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
-}
 ```
 
 ---
@@ -802,17 +739,6 @@ This document provides an overview of the Hotel Management System API, including
 }
 ```
 
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
-}
-```
-
 ---
 
 ### Login a User
@@ -847,17 +773,6 @@ This document provides an overview of the Hotel Management System API, including
 }
 ```
 
-##### 500 Server Error
-**Response:**
-```json
-{
-  "type": "https://example.com/probs/internal-server-error",
-  "title": "Internal Server Error",
-  "status": 500,
-  "detail": "An unexpected error occurred."
-}
-```
-
 ---
 
 ### Logout a User
@@ -879,6 +794,4 @@ This document provides an overview of the Hotel Management System API, including
 ```
 
 ---
-
-This concludes the comprehensive documentation for the Hotel Management System API. For additional details or clarifications, please refer to the API source or contact the support team.
 
