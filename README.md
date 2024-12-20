@@ -3,17 +3,23 @@
 ### Pagrindiniai taikomosios srities objektai:
 - Viešbutis → Kambarys → Rezervacija
 
-## Rolės:
+## Funkciniai Reikalavimai
+
+### Rolės:
 - Svečias: Gali peržiūrėti viešbučius ir kambarių užimtumą.
 - Naudotojas: Gali rezervuoti kambarius, peržiūrėti jau atliktas rezervacijas ir jas atšaukti.
 - Administratorius Gali: valdyti viešbučius, viešbučių kambarius, visas rezervacijas.
 
-## Naudojamos technologijos
+### Naudojamos technologijos
 
 - **Backend**: .NET Core
 - **Frontend**: Vue.JS
 - **Duomenų bazė**: PostgreSQL
 - **Hostingas**: Azure
+
+## Deployment diagrama
+
+![image](https://github.com/user-attachments/assets/147b299c-7763-493c-932a-e661fabdc1b7)
 
 ## Turinys
 - [Hotels API](#hotels-api)
