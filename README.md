@@ -19,7 +19,7 @@
 
 ## Deployment diagrama
 
-![image](https://github.com/user-attachments/assets/147b299c-7763-493c-932a-e661fabdc1b7)
+![image](https://github.com/user-attachments/assets/fa511157-1e78-4335-81d1-3fa8d4fee658)
 
 ## Turinys
 - [Hotels API](#hotels-api)
