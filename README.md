@@ -155,8 +155,8 @@
 ---
 
 ### Update a Hotel
-**Authentication**: Bearer token
-**Authorization**: Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: Admin
 **Endpoint:** `PUT /Api/Hotels/Update`
 
 #### Response Codes
@@ -220,8 +220,8 @@
 ---
 
 ### Delete a Hotel
-**Authentication**: Bearer token
-**Authorization**: Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: Admin
 **Endpoint:** `DELETE /Api/Hotels/{hotelId}`
 
 #### Response Codes
@@ -242,8 +242,8 @@
 ## Reservations API
 
 ### Create a Reservation
-**Authentication**: Bearer token
-**Authorization**: User, Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: User, Admin
 **Endpoint:** `POST /Api/Reservations`
 
 #### Response Codes
@@ -366,8 +366,8 @@
 ---
 
 ### Update a Reservation
-**Authentication**: Bearer token
-**Authorization**: User, Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: User, Admin
 **Endpoint:** `PUT /Api/Reservations/Update`
 
 #### Response Codes
@@ -436,8 +436,8 @@
 ---
 
 ### Delete a Reservation
-**Authentication**: Bearer token
-**Authorization**: User, Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: User, Admin
 **Endpoint:** `DELETE /Api/Reservations/{reservationId}`
 
 #### Response Codes
@@ -586,8 +586,8 @@
 ---
 
 ### Update a Room
-**Authentication**: Bearer token
-**Authorization**: Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: Admin
 **Endpoint:** `PUT /Api/Rooms/Update`
 
 #### Response Codes
@@ -664,8 +664,8 @@
 ---
 
 ### Delete a Room
-**Authentication**: Bearer token
-**Authorization**: Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: Admin
 **Endpoint:** `DELETE /Api/Rooms/{roomId}`
 
 #### Response Codes
@@ -800,8 +800,8 @@
 ---
 
 ### Get current user
-**Authentication**: Bearer token
-**Authorization**: User, Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: User, Admin
 **Endpoint:** `GET Api/Users`
 #### Response Codes
 ##### 200 Success
@@ -823,8 +823,8 @@
 ---
 
 ### Filter users
-**Authentication**: Bearer token
-**Authorization**: Admin
+#### **Authentication**: Bearer token
+#### **Authorization**: Admin
 **Endpoint:** `PUT /Api/Users/Filter`
 
 #### Response Codes
