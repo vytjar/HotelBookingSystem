@@ -32,8 +32,8 @@
 ## Hotels API
 
 ### Create a Hotel
-**Authentication**: Bearer token
-**Authorization**: Admin
+####**Authentication**: Bearer token
+####**Authorization**: Admin
 **Endpoint:** `POST /Api/Hotels`
 
 #### Response Codes
