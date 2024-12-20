@@ -1,4 +1,27 @@
-## Table of Contents
+# **Viešbučio kambarių rezervacijos sistema**
+
+### Pagrindiniai taikomosios srities objektai:
+- **Viešbutis** → **Kambarys** → **Rezervacija**
+
+## Rolės:
+-Svečias:
+  Gali peržiūrėti viešbučius ir kambarių užimtumą.
+- Naudotojas
+  Gali rezervuoti kambarius, peržiūrėti jau atliktas rezervacijas ir jas atšaukti.
+-Administratorius
+  Gali valdyti valdyti viešbučius.
+  Gali valdyti viešbučių kambarius.
+  Gali valdyti visas rezervacijas.
+
+
+## Naudojamos technologijos
+
+- **Backend**: .NET Core
+- **Frontend**: Vue.JS
+- **Duomenų bazė**: PostgreSQL
+- **Hostingas**: Azure
+
+## Turinys
 - [Hotels API](#hotels-api)
 - [Reservations API](#reservations-api)
 - [Rooms API](#rooms-api)
