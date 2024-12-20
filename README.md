@@ -1,7 +1,7 @@
 # **Viešbučio kambarių rezervacijos sistema**
 
 ### Pagrindiniai taikomosios srities objektai:
-- **Viešbutis** → **Kambarys** → **Rezervacija**
+- Viešbutis → Kambarys → Rezervacija
 
 ## Rolės:
 -Svečias:
